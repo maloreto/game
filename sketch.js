@@ -22,7 +22,8 @@ function setup() {
 
 function draw() {
   if(gameState == WAITING) {
-    image (bg, 0, 0, width, height);
+    //image (bg, 0, 0, width, height);
+    background (0);
     stroke (255);
     fill (255);
     text("PRESS KEY TO PLAY", 200, 500/2);
