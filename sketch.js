@@ -7,32 +7,41 @@ var snake;
 var food;
 var enemies;
 var r = 200;
+var bg;
+
+
+function preload (){
+  bg = loadImage ("images/BG1.png");
+}
 
 function setup() {
   createCanvas(500, 500);
   gameState = WAITING;
+  
 }
 
 function draw() {
   if(gameState == WAITING) {
-    background (r, 0, 120);
+    image (bg, 0, 0, width, height);
     stroke (255);
     fill (255);
     text("PRESS KEY TO PLAY", 200, 500/2);
   }
   else if(gameState == PLAYING_GAME) {
-    background(r, 0, 120);
+    image (bg, 0, 0, width, height);
     //text("PLAYING GAME", width/2, height/2);
     for (var i = 0; i < enemies.length; i++) {
       var enemy = enemies.get(i);
-      enemy.attractionPoint(.1, snake.position.x, snake.position.y);
+      enemy.attractionPoint(.01, snake.position.x, snake.position.y);
     }
     snake.overlap(food, collect);
     enemies.overlap(snake, dead);
     drawSprites();
+    fill (255);
+    text (score,30,30);
   }
   else if (gameState == GAME_OVER) {
-    background (r, 0, 120);
+    image (bg, 0, 0, width, height);
     stroke (255);
     fill (255);
     text("GAME OVER", 220, 500/2);
