@@ -6,12 +6,12 @@ var GAME_OVER = 2;
 var snake;
 var food;
 var enemies;
-var r = 200;
 var bg;
-
+//var logo;
 
 function preload (){
   bg = loadImage ("images/BG1.png");
+  //logo = loadImage ("images/logo.png")
 }
 
 function setup() {
@@ -22,15 +22,15 @@ function setup() {
 
 function draw() {
   if(gameState == WAITING) {
-    //image (bg, 0, 0, width, height);
     background (0);
+    //image (logo, 0, 0, 50, 50);
     stroke (255);
     fill (255);
-    text("PRESS KEY TO PLAY", 200, 500/2);
+    textSize (14);
+    text("PRESS KEY TO PLAY", 190, 500/2);
   }
   else if(gameState == PLAYING_GAME) {
     image (bg, 0, 0, width, height);
-    //text("PLAYING GAME", width/2, height/2);
     for (var i = 0; i < enemies.length; i++) {
       var enemy = enemies.get(i);
       enemy.attractionPoint(.01, snake.position.x, snake.position.y);
@@ -40,12 +40,18 @@ function draw() {
     drawSprites();
     fill (255);
     text (score,30,30);
+    if (snake.position.x > width || snake.position.y > height) {
+      gameState = GAME_OVER;
+    }
   }
+  
   else if (gameState == GAME_OVER) {
+    background (0);
     image (bg, 0, 0, width, height);
     stroke (255);
     fill (255);
-    text("GAME OVER", 220, 500/2);
+    textSize (14);
+    text("GAME OVER", 210, 500/2);
   }
 }
 
@@ -58,7 +64,9 @@ function collect(collector, collected) {
     collected.remove();
     score++;
     food = createSprite(random(width), random(height), 10, 10);
-
+    snake.width += 10
+    var newEnemy = createSprite(random(width), random(height), 20, 20);
+    enemies.add(newEnemy);
 }
 
 function keyPressed() {
@@ -83,11 +91,6 @@ function keyPressed() {
       //MOVE RIGHT
       snake.setSpeed(3, 0);
     }
-    
-    
-  }
-  else if (gameState == GAME_OVER) {
-    
   }
 }
   
@@ -98,15 +101,10 @@ function startGame() {
     snake = createSprite(width/2, height/2, 30, 30);
     //CREATE SOME ENEMIES
     enemies = new Group();
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 2; i++) {
       var newEnemy = createSprite(random(width), random(height), 20, 20);
       enemies.add(newEnemy);
     }
-    //CREATE THE COIN
+    //CREATE THE FOOD
     food = createSprite(random(width), random(height), 10, 10);
-    
-    if (snake.position.x < width){
-      gameState == GAME_OVER;
-    }
-  
 }
