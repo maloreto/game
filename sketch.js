@@ -7,27 +7,31 @@ var snake;
 var food;
 var enemies;
 var bg;
-//var logo;
+var a;
+var a2;
+var p1;
+var p2;
+var song;
+var bg1;
 
 function preload (){
-  bg = loadImage ("images/BG1.png");
-  //logo = loadImage ("images/logo.png")
+  song = loadSound ("sound/Light-Years.mp3")
+  bg = loadImage ("images/bg2.png");
+  bg1 = loadImage ("images/bg3.png");
+  a = loadImage ("images/a11.png");
+  a2 = loadImage ("images/a2.png");
+  p1 = loadImage ("images/p1.png");
+  p2 = loadImage ("images/p2.png");
 }
 
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(600, 550);
   gameState = WAITING;
-  
 }
 
 function draw() {
   if(gameState == WAITING) {
-    background (0);
-    //image (logo, 0, 0, 50, 50);
-    stroke (255);
-    fill (255);
-    textSize (14);
-    text("PRESS KEY TO PLAY", 190, 500/2);
+    image (bg1, 0, 0, width, height);
   }
   else if(gameState == PLAYING_GAME) {
     image (bg, 0, 0, width, height);
@@ -40,7 +44,7 @@ function draw() {
     drawSprites();
     fill (255);
     text (score,30,30);
-    if (snake.position.x > width || snake.position.y > height) {
+    if (snake.position.x > width || snake.position.y > height || snake.position.x < 0 || snake.position.y < 0) {
       gameState = GAME_OVER;
     }
   }
@@ -51,7 +55,7 @@ function draw() {
     stroke (255);
     fill (255);
     textSize (14);
-    text("GAME OVER", 210, 500/2);
+    text("GAME OVER", 250, 280);
   }
 }
 
@@ -63,15 +67,18 @@ function dead(collector, collected) {
 function collect(collector, collected) {
     collected.remove();
     score++;
-    food = createSprite(random(width), random(height), 10, 10);
+    createFood ()
     snake.width += 10
+    score += collected.points;
     var newEnemy = createSprite(random(width), random(height), 20, 20);
     enemies.add(newEnemy);
+    newEnemy.addImage(a2);
 }
 
 function keyPressed() {
   if(gameState == WAITING) {
     startGame();
+    song.loop();
   }
   else if (gameState == PLAYING_GAME) {
     if(keyCode == UP_ARROW) {
@@ -98,13 +105,27 @@ function startGame() {
     gameState = PLAYING_GAME;
     score = 0;
     //CREATE THE PLAYER
-    snake = createSprite(width/2, height/2, 30, 30);
+    snake = createSprite(width/2, height/2, 35, 20);
     //CREATE SOME ENEMIES
     enemies = new Group();
-    for (var i = 0; i < 2; i++) {
-      var newEnemy = createSprite(random(width), random(height), 20, 20);
+    for (var i = 0; i < 3; i++) {
+      var newEnemy = createSprite(random(width), random(height), 30, 30);
       enemies.add(newEnemy);
-    }
-    //CREATE THE FOOD
-    food = createSprite(random(width), random(height), 10, 10);
+      newEnemy.addImage(a);
+  }
+    createFood ();
+}
+
+function createFood (){
+  var s = random (0,50);
+  if (s > 25) {
+    food = createSprite(random(width), random(height), 10,10);
+    food.points = 25;
+    food.addImage(p1);
+  }
+  else {
+    food = createSprite (random(width), random(height), 20,20);
+    food.points = 1;
+    food.addImage(p2);
+  }
 }
